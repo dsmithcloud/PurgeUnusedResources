@@ -1,0 +1,43 @@
+{
+    "properties": {
+      "displayName": "Append dateCreated (utc) tag when any resource is created",
+      "policyType": "Custom",
+      "mode": "All",
+      "description": "Appends a dateCreated tag to any resources upon creation.  The value is utcNow()",
+      "metadata": {
+        "category": "Tags"
+      },
+      "parameters": {
+        "tagName": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Tag Name",
+            "description": "Name of the tag, such as 'dateCreated'"
+          },
+          "defaultValue": "dateCreated"
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "[concat('tags[', parameters('tagName'), ']')]",
+              "exists": "false"
+            }
+          ]
+        },
+        "then": {
+          "effect": "append",
+          "details": [
+            {
+              "field": "[concat('tags[', parameters('tagName'), ']')]",
+              "value": "[utcNow()]"
+            }
+          ]
+        }
+      }
+    },
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "systemData": {
+    }
+  }
